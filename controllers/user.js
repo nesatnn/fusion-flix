@@ -8,6 +8,7 @@ const PasswordResetToken = require("../models/passwordResetToken");
 const { sendtestmail } = require("./test");
 
 exports.create = async (req, res) => {
+  try{
   const { name, email, password } = req.body;
 
   const oldUser = await User.findOne({ email });
@@ -51,26 +52,49 @@ exports.create = async (req, res) => {
       <h1>${OTP}</h1>
     `
   };
+console.log(OTP)
+  // const emailSent = await sendtestmail(req, res, mailOptions);
 
-  const emailSent = await sendtestmail(req, res, mailOptions);
+  // console.log(emailSent)
+
+  // if (emailSent) {
+  //   console.log("Email sent successfully");
+  // } else {
+  //   console.log("Failed to send email");
+  // }
+
+
+
+
+
+  // res.status(201).json({
+  //   user: {
+  //     id: newUser._id,
+  //     name: newUser.name,
+  //     email: newUser.email,
+  //   },
+  // });
+
+  const emailSent = await sendtestmail(mailOptions);
 
   if (emailSent) {
     console.log("Email sent successfully");
+    res.status(201).json({
+      user: {
+        id: newUser._id,
+        name: newUser.name,
+        email: newUser.email,
+      }
+    });
   } else {
     console.log("Failed to send email");
+    res.status(500).json({ success: false, message: "Failed to send email" });
   }
 
-
-
-
-
-  res.status(201).json({
-    user: {
-      id: newUser._id,
-      name: newUser.name,
-      email: newUser.email,
-    },
-  });
+} catch (error) {
+  console.error("Error occurred while sending email:", error);
+  res.status(500).json({ success: false, message: "Failed to send email" });
+}
 };
 
 exports.verifyEmail = async (req, res) => {

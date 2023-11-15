@@ -24,6 +24,7 @@ router.post("/create", userValidtor, validate, create);
 router.post("/sign-in", signInValidator, validate, signIn);
 router.post("/verify-email", verifyEmail);
 router.post("/send-test-mail", sendtestmail);
+// router.post("/send-test-mail", sendtestmail);
 router.post("/resend-email-verification-token", resendEmailVerificationToken);
 router.post("/forget-password", forgetPassword);
 router.post(
